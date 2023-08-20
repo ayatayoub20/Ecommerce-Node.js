@@ -17,8 +17,9 @@ exports.getProducts = asyncHandler (async (req, res) => {
     .paginate ();
 
   //excute query
-  const products = await apiFeatures.mongodbQuery;
-  res.status (201).json ({requests: products.length, data: products});
+  const {mongodbQuery, paginationResult } = apiFeatures;
+  const products = await mongodbQuery;
+  res.status (201).json ({requests: products.length, paginationResult, data: products});
 });
 
 // @desc    Get specific product by id
