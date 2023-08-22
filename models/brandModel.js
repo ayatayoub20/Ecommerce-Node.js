@@ -1,22 +1,39 @@
-const mongoose = require('mongoose');
+const mongoose = require ('mongoose');
 // 1- Create Schema
-const brandSchema = new mongoose.Schema(
+const brandSchema = new mongoose.Schema (
   {
     name: {
       type: String,
       required: [true, 'brand required'],
-      unique: [true,'brand must be unique'], 
+      unique: [true, 'brand must be unique'],
       minlength: [3, 'Too short brand name'],
-      maxlength: [32, 'Too long brand name']
+      maxlength: [32, 'Too long brand name'],
     },
     slug: {
       type: String,
-      lowercase: true
+      lowercase: true,
     },
-    image: String
+    image: String,
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
+const setImageURL = doc => {
+  if (doc.image) {
+    const imageUrl = `${process.env.BASE_URL}/brands/${doc.image}`;
+    doc.image = imageUrl;
+  }
+};
+// findOne, findAll and update
+brandSchema.post ('init', doc => {
+  setImageURL (doc);
+});
+
+// create
+brandSchema.post ('save', doc => {
+  setImageURL (doc);
+});
+
+
 // 2- Create model
-module.exports = mongoose.model('Brand', brandSchema);
+module.exports = mongoose.model ('Brand', brandSchema);

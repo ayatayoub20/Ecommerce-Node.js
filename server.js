@@ -1,3 +1,5 @@
+const path = require('path');
+
 const express = require('express')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
@@ -12,8 +14,7 @@ const categoryRoute = require('./routes/categoryRoute')
 const subCategoryRoute = require('./routes/subCategoryRoute')
 const brandRoute = require('./routes/brandRoute')
 const productRoute = require('./routes/productRoute')
-
-
+const userRoute = require('./routes/userRoute')
 
 
 //conect with DB 
@@ -25,6 +26,8 @@ const app = express();
 //midleware
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'uploads')));
+
 
 if(process.env.NODE_ENV === 'development'){
     app.use(morgan('dev'))
@@ -36,7 +39,7 @@ app.use('/api/categories', categoryRoute);
 app.use('/api/subcategories', subCategoryRoute);
 app.use('/api/brands', brandRoute );
 app.use('/api/products', productRoute );
-
+app.use('/api/users' , userRoute);
 
 
 
