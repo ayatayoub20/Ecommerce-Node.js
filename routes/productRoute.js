@@ -16,11 +16,15 @@ const {
   resizeProductImages,
 } = require ('../services/productService');
 
+const authService = require('../services/authService');
+
 const router = express.Router ();
 
 router
   .route ('/')
   .post (
+    authService.protect,
+    authService.allowedTo ('admin', 'manager'),
     uploadProductImages,
     resizeProductImages,
     createProductValidator,
@@ -32,11 +36,18 @@ router
   .route ('/:id')
   .get (getProductValidator, getproduct)
   .put (
+    authService.protect,
+    authService.allowedTo ('admin', 'manager'),
     uploadProductImages,
     resizeProductImages,
     updateProductValidator,
     updateproduct
   )
-  .delete (deleteProductValidator, deleteproduct);
+  .delete (
+    authService.protect,
+    authService.allowedTo ('admin'),
+    deleteProductValidator,
+    deleteproduct
+  );
 
 module.exports = router;

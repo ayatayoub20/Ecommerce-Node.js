@@ -101,7 +101,7 @@ exports.changeUserPasswordValidator = [
   body('password')
     .notEmpty()
     .withMessage('You must enter new password')
-    .custom(async (val, { req }) => {
+    .custom(async (val, { req }) => {     // val -> passsword
       // 1) Verify current password
       const user = await User.findById(req.params.id);
       if (!user) {
@@ -110,7 +110,7 @@ exports.changeUserPasswordValidator = [
       const isCorrectPassword = await bcrypt.compare(
         req.body.currentPassword,
         user.password
-      );
+      );   //return boolean 
       if (!isCorrectPassword) {
         throw new Error('Incorrect current password');
       }
